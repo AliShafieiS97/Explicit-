@@ -5,43 +5,49 @@ using namespace std;
 
 int main(){
 	
-	double deltat,deltax,landa,rho,Cp; 
+	double landa = 400;
+	double rho = 8960; 
+	double Cp = 380; 
+	double alpha=landa/(rho*Cp);
+	double L = 1; 
+	double t = 2000; 
+	double deltat = 0.1; 
+	double deltax = 0.01;
+	int N = L/deltax; 
+	int M = t/deltat; 
 	
-	deltat=0.1;
-	deltax=0.01;
-	landa=400;
-	rho=8690;
-	Cp=380;
+	double convergence_index = (deltat*alpha)/(deltax*deltax);
 
-	double alpha=(landa/(rho*Cp)); 
-	cout<<"Alpha is equal to: "<<alpha<<endl;
-	double convergence_index=(deltat*alpha)/(deltax*deltax);
+	double T[M-1][N-1];
 	
+	if (convergence_index < 0.5){
 	
-	double T[100][10000];
+		for (int i = 0;i<=N-1;i++){
 	
-	int i,j;
+    		T[0][i] = 30; 
+    		
+    	}
+    
+    	for (int j = 0;j<=M-1-1;j++){
 	
-	for (i=1;i<=99;i++){
-		T[i][0]=30;
-	}
-	
-	for (j=0;j<=10000;j++){
-		T[0][j]=100;
-	}
-	
-	for (j=0;j<=10000;j++){
-		T[100][j]=20;
-	}
-	
-	
-	for(j=0;j<=10000;j++){
+    		T[j][0] = 100; 
+    		T[j][N-1] = 20;
+    		
+    	}
+    
+		for (int j = 0;j<=M-2;j++){
 		
-		for(i=1;i<=99;i++){
-			
-			T[i][j+1]=(((alpha*deltat)/(deltax*deltax))*(T[i+1][j]-2*T[i][j]+T[i-1][j]))+T[i][j];
-		}	
+        	for (int i = 1;i<=N-2;i++){
+        		
+            	T[j+1][i]=(((alpha*deltat)/(deltax*deltax))*(T[j][i+1]-2*T[j][i]+T[j][i-1])+T[j][i]);
+            	
+            }
+        }
 	}
-	cout<<T[50][5000];
+	
+	else {
+		
+		cout<<"Error! Please Refine the convergence index!";
+	}
 	
 }
